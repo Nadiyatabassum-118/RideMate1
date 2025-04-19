@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency SOS | RideMate</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .navbar {
+            background-color: #1e3c72;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-right: 15px;
+        }
+        .sos-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        .option-btn {
+            background-color: #1e3c72;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        #map {
+            height: 300px;
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        RideMate - Emergency SOS
+        <a href="rider_dashboard.html">Home</a>
+    </div>
+
+    <div class="sos-container">
+        <h2>Emergency Assistance</h2>
+        <p>Select an emergency option below:</p>
+        <button class="option-btn" onclick="navigateTo('police')">🚓 Go to Nearby Police Station</button>
+        <button class="option-btn" onclick="navigateTo('hospital')">🏥 Go to Nearby Hospital</button>
+
+        <h3>Live Location</h3>
+        <div id="map"></div>
+    </div>
+
+    <script>
+        let map, userMarker, userLocation;
+
+        function initializeMap() {
+            map = L.map('map').setView([12.9716, 77.5946], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            navigator.geolocation.watchPosition(
+                position => {
+                    const { latitude, longitude } = position.coords;
+                    userLocation = { lat: latitude, lng: longitude };
+                    map.setView([latitude, longitude], 15);
+                    if (userMarker) {
+                        userMarker.setLatLng([latitude, longitude]);
+                    } else {
+                        userMarker = L.marker([latitude, longitude]).addTo(map)
+                            .bindPopup('Your Location')
+                            .openPopup();
+                    }
+                },
+                error => {
+                    console.error("Error getting location:", error);
+                    alert("Could not get your precise location.");
+                },
+                { enableHighAccuracy: true }
+            );
+        }
+
+        function navigateTo(type) {
+            if (!userLocation) {
+                alert("Location not available");
+                return;
+            }
+            let searchQuery = type === 'police' ? 'police station' : 'hospital';
+            let destination = `https://www.google.com/maps/search/${searchQuery}/@${userLocation.lat},${userLocation.lng},15z`;
+            window.open(destination, "_blank");
+        }
+
+        document.addEventListener("DOMContentLoaded", initializeMap);
+    </script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideMate - Book a Ride</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <style>
+         * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        body { 
+            background: #f4f4f4; 
+            color: #333; 
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0a3d62;
+            color: white;
+            padding: 15px 20px;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .menu {
+            list-style: none;
+            display: flex;
+        }
+        .menu li {
+            margin-left: 20px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .menu a:hover {
+            color: #f8c291;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
+        }
+        .sos-btn {
+            position: absolute;
+            right: 20px;
+            top: 80px;
+            background-color: red;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .section {
+            margin: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        }
+        .ride-types {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .ride-type {
+            padding: 10px;
+            background-color: #ddd;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            flex-grow: 1;
+            margin: 5px;
+            min-width: 100px;
+        }
+        .ride-type.selected {
+            background-color: #1e3c72;
+            color: white;
+        }
+        .confirm-btn {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            margin: 20px auto;
+            text-align: center;
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        #map {
+            height: 300px;
+            width: 100%;
+            border-radius: 10px;
+        }
+        .fare {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>RideMate - Your Trusted Ride</div>
+        <div class="menu">
+            <a href="rider_dashboard.html">Home</a>
+            <a href="rider_profile.html">Profile</a>
+            <a href="rider_history.html">History</a>
+            <a href="login.html">Logout</a>
+        </div>
+    </div>
+    <button class="sos-btn"onclick="window.location.href='emergency.html'">SOS</button>
+    
+    <div class="section">
+        <label>Pickup Location:</label>
+        <input type="text" id="pickup" placeholder="Enter pickup location">
+        <label>Drop-off Location:</label>
+        <input type="text" id="dropoff" placeholder="Enter drop-off location">
+        <button onclick="plotRoute()">Show Route</button>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Select Ride</div>
+        <div class="ride-types">
+            <div class="ride-type" onclick="selectRide(this, 50)">Economy</div>
+            <div class="ride-type" onclick="selectRide(this, 100)">Premium</div>
+            <div class="ride-type" onclick="selectRide(this, 120)">XL</div>
+            <div class="ride-type" onclick="selectRide(this, 30)">Auto</div>
+            <div class="ride-type" onclick="selectRide(this, 20)">Moto</div>
+        </div>
+        <div class="fare" id="fareEstimate"></div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Route Map</div>
+        <div id="map"></div>
+    </div>
+    
+    <button class="confirm-btn" onclick="window.location.href='booking.html'">Confirm Booking</button>
+
+    
+    <script>
+        let map = L.map('map').setView([12.9716, 77.5946], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let routingControl;
+
+        function selectRide(element, fare) {
+            document.querySelectorAll('.ride-type').forEach(type => type.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('fareEstimate').innerText = "Estimated Fare: ₹" + fare;
+        }
+
+        function getCoordinates(address, callback) {
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        callback(data[0].lat, data[0].lon);
+                    } else {
+                        alert("Location not found: " + address);
+                    }
+                })
+                .catch(error => console.error("Error fetching coordinates:", error));
+        }
+
+        function plotRoute() {
+            let pickup = document.getElementById("pickup").value;
+            let dropoff = document.getElementById("dropoff").value;
+
+            if (!pickup || !dropoff) {
+                alert("Please enter both pickup and drop-off locations");
+                return;
+            }
+
+            getCoordinates(pickup, (pickupLat, pickupLon) => {
+                map.setView([pickupLat, pickupLon], 13);
+                getCoordinates(dropoff, (dropoffLat, dropoffLon) => {
+                    if (routingControl) {
+                        map.removeControl(routingControl);
+                    }
+                    routingControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(pickupLat, pickupLon),
+                            L.latLng(dropoffLat, dropoffLon)
+                        ],
+                        routeWhileDragging: true
+                    }).addTo(map);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
+<!-- Compare this snippet from rider_profile.html: -->
+<!-- <!DOCTYPE html>    
+ -->

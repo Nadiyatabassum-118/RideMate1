@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideMate - Payment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e3c72;
+            color: white;
+            padding: 15px 20px;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .menu {
+            list-style: none;
+            display: flex;
+        }
+        .menu li {
+            margin-left: 20px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .menu a:hover {
+            color: #f8c291;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1e3c72;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .hidden {
+            display: none;
+        }
+        .pay-btn {
+            width: 100%;
+            padding: 12px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+        .pay-btn:hover {
+            background: #163b60;
+            transform: scale(1.03);
+        }
+        .cash-message {
+            text-align: center;
+            font-size: 16px;
+            color: #1e3c72;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">RideMate - Your Travel Companion</div>
+        <ul class="menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="rider_profile.html">Profile</a></li>
+            <li><a href="rider_history.html">History</a></li>
+            <li><a href="login.html">Logout</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h2>Ride Payment</h2>
+        <p><strong>Pickup:</strong> MG Road, Bangalore</p>
+        <p><strong>Drop-off:</strong> Electronic City, Bangalore</p>
+        <p><strong>Fare:</strong> ₹250</p>
+        <p><strong>Ride Type:</strong> Economy</p>
+        <p><strong>Driver:</strong> Rajesh Kumar</p>
+        
+        <label for="payment-method">Choose Payment Method:</label>
+        <select id="payment-method" onchange="showPaymentFields()">
+            <option value="cash">Cash</option>
+            <option value="upi">UPI</option>
+            <option value="card">Credit/Debit Card</option>
+        </select>
+
+        <div id="upi-details" class="hidden">
+            <label for="upi-id">Enter UPI ID:</label>
+            <input type="text" id="upi-id" placeholder="example@upi">
+        </div>
+        
+        <div id="card-details" class="hidden">
+            <label for="card-number">Card Number:</label>
+            <input type="text" id="card-number" placeholder="**** **** **** ****">
+            <label for="expiry">Expiry Date:</label>
+            <input type="text" id="expiry" placeholder="MM/YY">
+            <label for="cvv">CVV:</label>
+            <input type="password" id="cvv" placeholder="***">
+        </div>
+        
+        <p id="cash-message" class="cash-message">Please pay the driver directly in cash.</p>
+        <button id="pay-btn" class="pay-btn" onclick="processPayment()">Make Payment</button>
+    </div>
+
+    <script>
+        function showPaymentFields() {
+            let method = document.getElementById("payment-method").value;
+            document.getElementById("upi-details").classList.add("hidden");
+            document.getElementById("card-details").classList.add("hidden");
+            document.getElementById("cash-message").style.display = "none";
+            document.getElementById("pay-btn").style.display = "block";
+            
+            if (method === "upi") {
+                document.getElementById("upi-details").classList.remove("hidden");
+            } else if (method === "card") {
+                document.getElementById("card-details").classList.remove("hidden");
+            } else if (method === "cash") {
+                document.getElementById("cash-message").style.display = "block";
+                document.getElementById("pay-btn").style.display = "none";
+            }
+        }
+
+        function processPayment() {
+            alert("Payment Successful! Thank you for riding with RideMate.");
+            window.location.href = "history_rider.html";
+        }
+    </script>
+</body>
+</html>

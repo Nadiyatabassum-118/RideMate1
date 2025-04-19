@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideMate - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="home-container">
+        <div class="home-content">
+            <h1>Welcome to RideMate</h1>
+            <p class="tagline">Safe. Reliable. Convenient.</p>
+            <p class="description">RideMate is your trusted ride-booking platform, designed to enhance safety, accessibility, and comfort. Our standout features include:</p>
+            <ul class="features">
+                <li>Women drivers exclusively for women riders</li>
+                <li>Emergency SOS button for instant emergency ride booking</li>
+                <li>Seamless experience for both riders and drivers</li>
+                <li>Multiple ride options: Economy, Shared, Premium, XL, Auto, Moto</li>
+            </ul>
+            <a href="signup.html" class="btn">Get Started</a>
+            <p>Already a user? <a href="login.html">Login here</a></p>
+        </div>
+        <div class="image-container">
+            <img src="c:\Users\Nadiya\Downloads\Taxi Booking Software Plugin for WordPress.jpg" alt="RideMate Preview">
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- styles.css -->
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to right, #1e3c72, #2a5298);
+        color: white;
+        text-align: center;
+    }
+    .home-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 90%;
+        max-width: 1000px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        color: #333;
+    }
+    .home-content {
+        flex: 1;
+        text-align: left;
+        padding-right: 20px;
+    }
+    h1 {
+        color: #0a3d62;
+    }
+    .tagline {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .description {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    .features {
+        text-align: left;
+        padding-left: 20px;
+    }
+    .btn {
+        display: inline-block;
+        padding: 14px 24px;
+        font-size: 18px;
+        color: white;
+        background: #fbc531;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: 0.3s;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    .btn:hover {
+        background: #e1a60a;
+    }
+    a {
+        color: #1e3c72;
+        font-weight: 600;
+    }
+    .image-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+    .image-container img {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>

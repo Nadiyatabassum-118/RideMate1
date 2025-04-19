@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RideMate - Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #0a3d62;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .form-container {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 14px;
+      box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+      width: 650px;
+      max-width: 95%;
+      text-align: center;
+      margin: 50px 0;
+    }
+    h2 {
+      color: #0a3d62;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin: 12px 0 5px;
+      text-align: left;
+    }
+    .input-group {
+      position: relative;
+    }
+    input, select {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 14px;
+      color: #0a3d62;
+    }
+    .signup-btn {
+      width: 100%;
+      padding: 14px;
+      background: #0a3d62;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+    .signup-btn:hover {
+      background: #072b45;
+      transform: scale(1.03);
+    }
+    .toggle-text {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .toggle-text a {
+      color: #0a3d62;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .toggle-text a:hover {
+      color: #072b45;
+    }
+    .driver-fields {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Sign Up for RideMate</h2>
+    <form id="signupForm">
+      <label for="role">Sign up as:</label>
+      <select id="role" required onchange="toggleDriverFields()">
+        <option value="rider">Rider</option>
+        <option value="driver">Driver</option>
+      </select>
+
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" required placeholder="Enter your full name" />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required placeholder="Enter your email" />
+
+      <label for="gender">Gender:</label>
+      <select id="gender" required>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="not_specified">Not Specified</option>
+      </select>
+
+      <!-- Driver-Specific Fields -->
+      <div class="driver-fields" id="driverFields">
+        <label for="licenseNumber">License Number:</label>
+        <input type="text" id="licenseNumber" placeholder="Enter your license number" />
+
+        <label for="vehicleNumber">Vehicle Number:</label>
+        <input type="text" id="vehicleNumber" placeholder="Enter your vehicle number" />
+      </div>
+
+      <label for="password">Password:</label>
+      <div class="input-group">
+        <input type="password" id="password" required placeholder="Enter your password" />
+        <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+      </div>
+
+      <label for="confirmPassword">Re-enter Password:</label>
+      <div class="input-group">
+        <input type="password" id="confirmPassword" required placeholder="Re-enter your password" />
+        <span class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</span>
+      </div>
+
+      <button type="submit" class="signup-btn">Sign Up</button>
+    </form>
+
+    <p class="toggle-text">
+      Already have an account? <a href="login.html">Login here</a>
+    </p>
+  </div>
+
+  <script>
+
+    // Form submit handler
+window.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("signupForm");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const role = document.getElementById("role").value;
+    const gender = document.getElementById("gender").value;
+
+    const license_number = role === "driver" ? document.getElementById("licenseNumber").value : null;
+    const vehicle_number = role === "driver" ? document.getElementById("vehicleNumber").value : null;
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    // Create the payload to send to the backend
+    const payload = {
+      name,
+      email,
+      password,
+      role,
+      gender,
+      license_number,
+      vehicle_number
+    };
+
+    // Send data to backend (Node.js Express)
+    fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload) // Sending payload as JSON
+    })
+      .then((response) => response.json()) // Expecting JSON response from the backend
+      .then((data) => {
+        if (data.success) {
+          alert("Signup successful!");
+          if (role === "rider") {
+            window.location.href = "rider_dashboard.html"; // Redirect to rider dashboard
+          } else {
+            window.location.href = "driver_dashboard.html"; // Redirect to driver dashboard
+          }
+        } else {
+          alert(data.message || "Signup failed. Please try again.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error during signup:", err);
+        alert("Signup failed. Please check console for details.");
+      });
+  });
+});
+
+    // Toggle password visibility
+    function togglePassword(id) {
+      const field = document.getElementById(id);
+      field.type = field.type === "password" ? "text" : "password";
+    }
+
+    // Show/Hide driver fields based on role
+    function toggleDriverFields() {
+      const role = document.getElementById("role").value;
+      const driverFields = document.getElementById("driverFields");
+      driverFields.style.display = role === "driver" ? "block" : "none";
+    }
+
+    // Form submit handler
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("signupForm");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const role = document.getElementById("role").value;
+        const gender = document.getElementById("gender").value;
+
+        const license_number = role === "driver" ? document.getElementById("licenseNumber").value : null;
+        const vehicle_number = role === "driver" ? document.getElementById("vehicleNumber").value : null;
+
+        if (password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+        }
+
+        // Log form data for now instead of sending to backend
+        console.log({
+          name,
+          email,
+          password,
+          confirmPassword,
+          role,
+          gender,
+          license_number,
+          vehicle_number
+        });
+
+        alert("Form submitted! Check console for logged data.");
+
+        // Optionally redirect or handle form completion:
+        if (role === "rider") {
+          window.location.href = "rider_dashboard.html";
+        } else {
+          window.location.href = "driver_dashboard.html";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

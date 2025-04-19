@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard | RideMate</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1e3c72;
+            padding: 15px 30px;
+            color: white;
+        }
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .nav-left h2 {
+            margin: 0;
+        }
+        .nav-left p {
+            margin: 0;
+            font-size: 14px;
+            font-style: italic;
+        }
+        .nav-right ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .nav-right ul li {
+            margin-right: 20px;
+        }
+        .nav-right ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .nav-right ul li a:hover {
+            background-color: #3a5a98;
+            border-radius: 5px;
+        }
+        .dashboard-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .availability-section, .ride-requests, .earnings-section, .map-section {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+        }
+        .ride-request {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .accept, .decline {
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .accept {
+            background: green;
+            color: white;
+        }
+        .decline {
+            background: red;
+            color: white;
+        }
+        .availability-status {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <h2>RideMate</h2>
+            <p>Your Safe & Reliable RIde</p>
+        </div>
+        <div class="nav-right">
+            <ul>
+                <li><a href="driver_dashboard.html">Home</a></li>
+                <li><a href="driver_profile.html">Profile</a></li>
+                <li><a href="driver_history.html">History</a></li>
+                <li><a href="login.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="availability-section">
+            <label for="availability">Availability:</label>
+            <input type="radio" id="online" name="availability" value="online" checked>
+            <label for="online">online</label>
+            <input type="radio" id="offline" name="availability" value="offline" checked>
+            <label for="offline">Offline</label>
+            <p class="availability-status">You're currently offline</p>
+        </div>
+
+        <div class="map-section">
+            <h3>Driver Location</h3>
+            <div id="map" class="map-container"></div>
+        </div>
+
+        <div class="ride-requests">
+            <h3>New Ride Requests</h3>
+            <div id="rideRequestContainer">
+                <!-- Ride requests will appear here dynamically -->
+            </div>
+        </div>
+
+        <div class="earnings-section">
+            <h3>Earnings Summary</h3>
+            <p>Today: ₹<span id="dailyEarnings">0</span></p>
+            <p>This Week: ₹<span id="weeklyEarnings">0</span></p>
+            <p>This Month: ₹<span id="monthlyEarnings">0</span></p>
+        </div>
+    </div>
+
+    <script>
+        
+    document.addEventListener("DOMContentLoaded", () => {
+        // Select elements
+        const rideRequestContainer = document.getElementById("rideRequestContainer");
+        const availabilityRadios = document.getElementsByName("availability");
+        const availabilityStatus = document.querySelector(".availability-status");
+    
+        // Initialize OpenStreetMap
+        const map = L.map('map').setView([12.9716, 77.5946], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    
+        let driverMarker, accuracyCircle;
+    
+        // Function to update driver's live location
+        function updateDriverLocation(position) {
+            const { latitude, longitude, accuracy } = position.coords;
+    
+            console.log(`Updated Location: ${latitude}, ${longitude}, Accuracy: ${accuracy}m`);
+    
+            if (!driverMarker) {
+                driverMarker = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup("Your Live Location").openPopup();
+            } else {
+                driverMarker.setLatLng([latitude, longitude]);
+            }
+    
+            if (accuracyCircle) {
+                map.removeLayer(accuracyCircle);
+            }
+    
+            accuracyCircle = L.circle([latitude, longitude], {
+                radius: accuracy,
+                color: "blue",
+                fillColor: "blue",
+                fillOpacity: 0.15
+            }).addTo(map);
+    
+            map.setView([latitude, longitude], 15);
+        }
+    
+        // Handle location error
+        function handleLocationError(error) {
+            console.error("Location Error:", error.message);
+            alert("Could not fetch live location. Enable GPS & allow location access.");
+        }
+    
+        // Get live location
+        if ("geolocation" in navigator) {
+            navigator.geolocation.watchPosition(updateDriverLocation, handleLocationError, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 1000
+            });
+        } else {
+            alert("Geolocation is not supported by your browser.");
+        }
+    
+        // Change availability status
+        availabilityRadios.forEach(radio => {
+            radio.addEventListener("change", () => {
+                availabilityStatus.textContent = radio.value === "online" ? "You're now online" : "You're currently offline";
+            });
+        });
+    
+        // Function to add a new ride request
+        function addRideRequest(riderName, pickup, drop, fare) {
+            const requestDiv = document.createElement("div");
+            requestDiv.classList.add("ride-request");
+            requestDiv.innerHTML = `
+                <p><strong>Rider:</strong> ${riderName}</p>
+                <p><strong>Pickup:</strong> ${pickup}</p>
+                <p><strong>Drop-off:</strong> ${drop}</p>
+                <p><strong>Fare:</strong> ₹${fare}</p>
+                <button class="accept">Accept</button>
+                <button class="decline">Decline</button>
+            `;
+    
+            // Handle accept button click
+            requestDiv.querySelector(".accept").addEventListener("click", () => {
+                alert("Ride Accepted!");
+                requestDiv.remove();
+            });
+    
+            // Handle decline button click
+            requestDiv.querySelector(".decline").addEventListener("click", () => {
+                alert("Ride Declined!");
+                requestDiv.remove();
+            });
+    
+            rideRequestContainer.appendChild(requestDiv);
+        }
+    
+        // Simulate new ride request (appears after 3 seconds)
+        setTimeout(() => {
+            addRideRequest("Aditi Sharma", "Rajaji Nagar", "HBR Layout", 270);
+        }, 3000);
+    
+        setTimeout(() => {
+            addRideRequest("Ayaan Ahmed", "CMR Main Road", "Baglur", 160);
+        }, 7000);
+    });
+    
+    </script>
+</body>
+</html>

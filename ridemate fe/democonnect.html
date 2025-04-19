@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RideMate - Booking Flow</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f8ff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #007BFF;
+    }
+
+    .step {
+      margin: 25px auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 12px 20px;
+      margin-top: 15px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #progress {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 10px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #bar {
+      width: 0%;
+      height: 25px;
+      background-color: #28a745;
+      border-radius: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .completed {
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>RideMate Booking Simulation</h1>
+
+  <div class="step" id="step1">
+    <p><strong>Step 1:</strong> Rider books a ride</p>
+    <button onclick="confirmBooking()">Confirm Booking</button>
+  </div>
+
+  <div class="step hidden" id="step2">
+    <p><strong>Step 2:</strong> Connecting to nearby drivers...</p>
+    <button onclick="driverConfirm()">Driver Confirms Ride</button>
+  </div>
+
+  <div class="step hidden" id="step3">
+    <p><strong>Step 3:</strong> Driver has confirmed. Start ride?</p>
+    <button onclick="startRide()">Start Ride</button>
+  </div>
+
+  <div class="step hidden" id="step4">
+    <p><strong>Step 4:</strong> Ride in Progress...</p>
+    <div id="progress">
+      <div id="bar"></div>
+    </div>
+    <p id="status"></p>
+  </div>
+
+  <div class="step hidden" id="step5">
+    <p class="completed">✅ Ride Completed!</p>
+    <button onclick="redirectToPayment()">Proceed to Payment</button>
+  </div>
+
+  <div class="step hidden" id="paymentPage">
+    <p><strong>Payment Page:</strong> (Simulated)</p>
+    <p>Total Fare: ₹240</p>
+    <button onclick="submitPayment()">Pay Now</button>
+  </div>
+
+  <div class="step hidden" id="reviewPage">
+    <p><strong>Rate Your Ride:</strong></p>
+    <input type="number" min="1" max="5" placeholder="1 to 5 stars"/>
+    <br/><br/>
+    <textarea placeholder="Leave feedback..." rows="4" style="width: 100%; max-width: 500px;"></textarea>
+    <br/><br/>
+    <button onclick="submitReview()">Submit Review</button>
+  </div>
+
+  <script>
+    function confirmBooking() {
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
+    }
+
+    function driverConfirm() {
+      document.getElementById("step2").classList.add("hidden");
+      document.getElementById("step3").classList.remove("hidden");
+    }
+
+    function startRide() {
+      document.getElementById("step3").classList.add("hidden");
+      document.getElementById("step4").classList.remove("hidden");
+      document.getElementById("progress").style.display = "block";
+
+      let width = 0;
+      const bar = document.getElementById("bar");
+      const status = document.getElementById("status");
+      const interval = setInterval(() => {
+        if (width >= 100) {
+          clearInterval(interval);
+          status.innerText = "Ride Completed!";
+          document.getElementById("step5").classList.remove("hidden");
+        } else {
+          width += 1;
+          bar.style.width = width + "%";
+          status.innerText = "In Transit... " + width + "%";
+        }
+      }, 100);
+    }
+
+    function redirectToPayment() {
+      document.getElementById("step5").classList.add("hidden");
+      document.getElementById("paymentPage").classList.remove("hidden");
+    }
+
+    function submitPayment() {
+      alert("Payment Successful!");
+      document.getElementById("paymentPage").classList.add("hidden");
+      document.getElementById("reviewPage").classList.remove("hidden");
+    }
+
+    function submitReview() {
+      alert("Thank you for your feedback!");
+      location.reload(); // or redirect to dashboard
+    }
+  </script>
+
+</body>
+</html>

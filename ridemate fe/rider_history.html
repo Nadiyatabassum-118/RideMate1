@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideMate - Ride History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        /* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0a3d62;
+    color: white;
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Menu */
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+.menu li {
+    display: inline;
+}
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+.menu a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Logout Button */
+.logout-btn {
+    background: red;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+.logout-btn:hover {
+    background: darkred;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+.ride {
+            background: #a8b4c0;
+            padding: 13px;
+            margin-bottom: 13px;
+            border-radius: 6px;
+        }
+        .ride p {
+            margin: 3px 0;
+        }
+</style>
+
+<nav class="navbar">
+    <div class="logo">RideMate - Your Safe & Reliable Ride</div>
+    <ul class="menu">
+        <li><a href="rider_dashboard.html">Home</a></li>
+        <li><a href="rider_profile.html">Profile</a></li>
+        <li><a href="rider_history.html">History</a></li>
+        <li><a href="login.html" class="logout-btn">Logout</a></li>
+    </ul>
+</nav>
+
+    
+    <div class="container">
+        <h2>Your Ride History</h2>
+        <div class="ride">
+            <p><strong>Pickup:</strong> MG Road, Bangalore</p>
+            <p><strong>Drop-off:</strong> Electronic City, Bangalore</p>
+            <p><strong>Fare:</strong> ₹250</p>
+            <p><strong>Ride Type:</strong> Economy</p>
+            <p><strong>Driver:</strong> Rajesh Kumar</p>
+        </div>
+        <div class="ride">
+            <p><strong>Pickup:</strong> Indiranagar, Bangalore</p>
+            <p><strong>Drop-off:</strong> Whitefield, Bangalore</p>
+            <p><strong>Fare:</strong> ₹320</p>
+            <p><strong>Ride Type:</strong> Premium</p>
+            <p><strong>Driver:</strong> Anil Sharma</p>
+        </div>
+        <div class="ride">
+            <p><strong>Pickup:</strong> Koramangala, Bangalore</p>
+            <p><strong>Drop-off:</strong> Majestic, Bangalore</p>
+            <p><strong>Fare:</strong> ₹180</p>
+            <p><strong>Ride Type:</strong> Auto</p>
+            <p><strong>Driver:</strong> Suresh Reddy</p>
+        </div>
+    </div>
+</body>
+</html>

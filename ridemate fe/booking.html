@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideMate - Ride Confirmation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #f4f4f4; color: #333; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; background: #0a3d62; color: white; padding: 15px 20px; }
+        .navbar .logo { font-size: 20px; font-weight: bold; }
+        .menu { list-style: none; display: flex; }
+        .menu li { margin-left: 20px; }
+        .menu a { text-decoration: none; color: white; font-size: 16px; transition: 0.3s; }
+        .menu a:hover { color: #f8c291; }
+        .container { width: 90%; max-width: 600px; margin: 30px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1); }
+        h2 { text-align: center; color: #0a3d62; }
+        p { margin: 10px 0; }
+        .map-container { width: 100%; height: 300px; margin-top: 15px; border-radius: 8px; overflow: hidden; }
+        .btn { display: block; width: 100%; padding: 12px; margin-top: 15px; text-align: center; background: #0a3d62; color: white; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 6px; transition: 0.3s; }
+        .btn:hover { background: #072b45; transform: scale(1.03); }
+        .cancel-btn { background: #c0392b; }
+        .cancel-btn:hover { background: #922b21; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">RideMate - Your Travel Companion</div>
+        <ul class="menu">
+            <li><a href="rider_dashboard.html">Home</a></li>
+            <li><a href="rider_profile.html">Profile</a></li>
+            <li><a href="rider_history.html">History</a></li>
+            <li><a href="login.html">Logout</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h2>Ride Confirmed</h2>
+        <p><strong>Pickup:</strong> Kothanur, Bangalore</p>
+        <p><strong>Drop-off:</strong> Kristu Jayanti College, Bangalore</p>
+        <p><strong>Fare:</strong> ₹100</p>
+        <p><strong>Ride Type:</strong> Premium</p>
+        <p><strong>Driver:</strong> Rajesh Kumar</p>
+        <p><strong>Vehicle:</strong> White Swift (KA01 AB 1234)</p>
+        <p><strong>Contact:</strong> +91 98765 43210</p>
+        
+        <div id="map" class="map-container"></div>
+        
+        <a href="tel:+919876543210" class="btn">Call Driver</a>
+        <button class="btn cancel-btn" onclick="cancelRide()">Cancel Ride</button>
+    </div>
+    
+    <script>
+        var map = L.map('map').setView([12.9716, 77.5946], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        
+        var driverMarker = L.marker([12.9716, 77.5946]).addTo(map).bindPopup("Driver's Location").openPopup();
+        
+        function cancelRide() {
+            alert("Ride Cancelled");
+            window.location.href = "rider_dashboard.html";
+        }
+    </script>
+</body>
+</html>

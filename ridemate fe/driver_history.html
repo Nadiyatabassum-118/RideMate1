@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideMate - Driver Ride History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        body { 
+            background: #f4f4f4; 
+            color: #333; 
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0a3d62;
+            color: white;
+            padding: 15px 20px;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .menu {
+            list-style: none;
+            display: flex;
+        }
+        .menu li {
+            margin-left: 20px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .menu a:hover {
+            color: #f8c291;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0a3d62;
+        }
+        .ride {
+            background: #e3f2fd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .ride p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">RideMate - Your Travel Companion</div>
+        <ul class="menu">
+            <li><a href="driver_dashboard.html">Home</a></li>
+            <li><a href="driver_profile.html">Profile</a></li>
+            <li><a href="driver_history.html">History</a></li>
+            <li><a href="login.html">Logout</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h2>Your Ride History</h2>
+        <div class="ride">
+            <p><strong>Pickup:</strong> MG Road, Bangalore</p>
+            <p><strong>Drop-off:</strong> Electronic City, Bangalore</p>
+            <p><strong>Fare Earned:</strong> ₹250</p>
+            <p><strong>Ride Type:</strong> Economy</p>
+            <p><strong>Rider:</strong> Rahul Sharma</p>
+            <p><strong>Date & Time:</strong> March 20, 2025 - 10:30 AM</p>
+            <p><strong>Status:</strong> Completed</p>
+        </div>
+        <div class="ride">
+            <p><strong>Pickup:</strong> Indiranagar, Bangalore</p>
+            <p><strong>Drop-off:</strong> Whitefield, Bangalore</p>
+            <p><strong>Fare Earned:</strong> ₹320</p>
+            <p><strong>Ride Type:</strong> Premium</p>
+            <p><strong>Rider:</strong> Ananya Verma</p>
+            <p><strong>Date & Time:</strong> March 19, 2025 - 5:45 PM</p>
+            <p><strong>Status:</strong> Completed</p>
+        </div>
+        <div class="ride">
+            <p><strong>Pickup:</strong> Koramangala, Bangalore</p>
+            <p><strong>Drop-off:</strong> Majestic, Bangalore</p>
+            <p><strong>Fare Earned:</strong> ₹180</p>
+            <p><strong>Ride Type:</strong> Auto</p>
+            <p><strong>Rider:</strong> Vinay Kumar</p>
+            <p><strong>Date & Time:</strong> March 18, 2025 - 2:15 PM</p>
+            <p><strong>Status:</strong> Completed</p>
+        </div>
+    </div>
+</body>
+</html>
